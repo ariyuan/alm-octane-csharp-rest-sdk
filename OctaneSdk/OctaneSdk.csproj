@@ -71,6 +71,7 @@
     <Compile Include="Entities\Teams\Team.cs" />
     <Compile Include="Entities\Tests\Run.cs" />
     <Compile Include="Entities\Tests\RunAutomated.cs" />
+    <Compile Include="Entities\Tests\RunManualGherkin.cs" />
     <Compile Include="Entities\Tests\RunManual.cs" />
     <Compile Include="Entities\Tests\RunSuite.cs" />
     <Compile Include="Entities\Tests\TestAutomated.cs" />
