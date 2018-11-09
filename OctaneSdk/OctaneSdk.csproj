@@ -66,6 +66,7 @@
     <Compile Include="Entities\Helpers\EntityHelper.cs" />
     <Compile Include="Entities\Requirements\Requirement.cs" />
     <Compile Include="Entities\Requirements\RequirementDocument.cs" />
+    <Compile Include="Entities\Resource\TestSuiteLlinkToTest.cs" />
     <Compile Include="Entities\Tasks\Task.cs" />
     <Compile Include="Entities\Teams\TeamMember.cs" />
     <Compile Include="Entities\Teams\Team.cs" />
