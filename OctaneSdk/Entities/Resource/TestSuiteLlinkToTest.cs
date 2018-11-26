@@ -15,57 +15,54 @@
 */
 
 
+using MicroFocus.Adm.Octane.Api.Core.Services.Attributes;
+
 namespace MicroFocus.Adm.Octane.Api.Core.Entities
 {
     /// <summary>
-    /// Wrapper for Run entity
+    /// Wrapper for TestSuiteLlinkToTest
     /// More fields might be supported by entity that still are not exposed in the class
     /// </summary>
-    public class Run : BaseEntity
+    [CustomCollectionPath("test_suite_link_to_tests")]
+    public class TestSuiteLlinkToTest : BaseEntity
     {
-        public static string SUBTYPE_FIELD = "subtype";
-        public static string PHASE_FIELD = "phase";
-        public const string TEST_FIELD = "test";
-        public const string PARENTSUITE_FIELD = "parent_suite";
+        public static string test_suite = "test_suite";
+        public static string test = "test";
 
-        public static string SUBTYPE_MANUAL_TEST = "test_manual";
-
-        public Run()
+        public TestSuiteLlinkToTest()
         {
-            AggregateType = "run";
+            AggregateType = "test_suite_link_to_test";
         }
 
-        public Run(EntityId id)
+        public TestSuiteLlinkToTest(EntityId id)
             : base(id)
         {
-            AggregateType = "run";
+            AggregateType = "test_suite_link_to_test";
         }
 
-        public string SubType
+        public string TestSuite
         {
             get
             {
-                return GetStringValue(SUBTYPE_FIELD);
+                return GetStringValue(test_suite);
             }
             set
             {
-                SetValue(SUBTYPE_FIELD, value);
+                SetValue(test_suite, value);
             }
-
         }
 
-        public Phase Phase
+        public string Test
         {
             get
             {
-                return (Phase)GetValue(PHASE_FIELD);
+                return GetStringValue(test);
             }
             set
             {
-                SetValue(PHASE_FIELD, value);
+                SetValue(test, value);
             }
+
         }
-
-
     }
 }
