@@ -1,3 +1,4 @@
+
 ﻿/*!
 * (c) 2016-2018 EntIT Software LLC, a Micro Focus company
 *
@@ -22,6 +23,7 @@ using MicroFocus.Adm.Octane.Api.Core.Services.Core;
 using MicroFocus.Adm.Octane.Api.Core.Services.GroupBy;
 using MicroFocus.Adm.Octane.Api.Core.Services.Query;
 using MicroFocus.Adm.Octane.Api.Core.Services.RequestContext;
+using MicroFocus.Adm.Octane.Api.Core.Services.Version;
 using System;
 using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
@@ -39,9 +41,6 @@ namespace MicroFocus.Adm.Octane.Api.Core.Services
     {
         private RestConnector rc;
         private JavaScriptSerializer jsonSerializer;
-
-
-
 
         public EntityService(RestConnector rc)
         {
@@ -86,6 +85,21 @@ namespace MicroFocus.Adm.Octane.Api.Core.Services
             if (response.Data != null)
             {
                 EntityListResult<T> result = jsonSerializer.Deserialize<EntityListResult<T>>(response.Data);
+                return result;
+            }
+            return null;
+        }
+
+        public async Task<EntityListResult<BaseEntity>> GetAsyncReferenceFields(IRequestContext context, String apiEntityName, IList<QueryPhrase> queryPhrases, List<String> fields, int? limit)
+        {
+            string url = context.GetPath() + "/" + apiEntityName;
+
+            String queryString = QueryStringBuilder.BuildQueryString(queryPhrases, fields, null, null, limit, null, null);
+
+            ResponseWrapper response = await rc.ExecuteGetAsync(url, queryString).ConfigureAwait(RestConnector.AwaitContinueOnCapturedContext);
+            if (response.Data != null)
+            {
+                EntityListResult<BaseEntity> result = jsonSerializer.Deserialize<EntityListResult<BaseEntity>>(response.Data);
                 return result;
             }
             return null;
@@ -347,6 +361,28 @@ namespace MicroFocus.Adm.Octane.Api.Core.Services
         }
 
         /// <summary>
+        /// Returns the label metadata for the entities
+        /// </summary>
+        public async Task<ListResult<EntityLabelMetadata>> GetLabelMetadataAsync(IRequestContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            string url = context.GetPath() + "/entity_labels";
+
+            ResponseWrapper response = await rc.ExecuteGetAsync(url, "").ConfigureAwait(RestConnector.AwaitContinueOnCapturedContext);
+
+            if (response.Data == null)
+            {
+                return null;
+            }
+
+            return jsonSerializer.Deserialize<ListResult<EntityLabelMetadata>>(response.Data);
+        }
+
+        /// <summary>
         /// Search for all entities of given type that satify the search criteria
         /// </summary>
         public async Task<EntityListResult<T>> SearchAsync<T>(IRequestContext context, string searchString, List<string> subTypes, int limit = 30)
@@ -467,5 +503,22 @@ namespace MicroFocus.Adm.Octane.Api.Core.Services
 
             return result;
         }
+
+
+        /// <summary>
+        /// Return the octane version
+        /// </summary>
+        public async Task<OctaneVersion> GetOctaneVersion()
+        {
+            string url = "/admin/server/version";
+            ResponseWrapper response = await rc.ExecuteGetAsync(url, null).ConfigureAwait(RestConnector.AwaitContinueOnCapturedContext);
+            if (response.Data == null)
+            {
+                return null;
+            }
+
+            return new OctaneVersion(jsonSerializer.Deserialize<OctaneVersionMetadata>(response.Data).display_version);
+        }
+
     }
 }
