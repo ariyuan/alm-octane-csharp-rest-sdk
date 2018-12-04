@@ -71,6 +71,7 @@
     <Compile Include="Entities\Tasks\Task.cs" />
     <Compile Include="Entities\Teams\TeamMember.cs" />
     <Compile Include="Entities\Teams\Team.cs" />
+    <Compile Include="Entities\Tests\RunStep.cs" />
     <Compile Include="Entities\Tests\Run.cs" />
     <Compile Include="Entities\Tests\RunAutomated.cs" />
     <Compile Include="Entities\Tests\RunManualGherkin.cs" />
